@@ -1,8 +1,10 @@
-import requests
+import requests, json
 from bs4 import BeautifulSoup as bs
 
 link = ("https://kawalcorona.com")
+link2 = ("https://api.kawalcorona.com/indonesia/provinsi")
 web = requests.get(link).text
+web1 = requests.get(link2).json()
 parse = bs(web, "html.parser")
 def banner():
     print ("[1] Data Corona Global")
@@ -12,9 +14,17 @@ def corona1():
         print("_" * 50)
         print(i.find('div', class_='text-white').get_text())
 def corona2():
-    for y in (parse.find_all("div", clas_="row row-cards")):
-        print("_"*50)
-        print(y.find("tbody"))
+    for i in web1:
+        o = (i['attributes']['Provinsi'])
+        p = (i['attributes']['Kasus_Posi'])
+        q = (i['attributes']['Kasus_Semb'])
+        r = (i['attributes']['Kasus_Meni'])
+        print("_"*20)
+        print(o)
+        print("Kasus Positif :", p)
+        print("Kasus Sembuh :", q)
+        print("Kasus Meninggal :", r)
+        print("_"*20)
 
 if __name__=="__main__":
     banner()
@@ -22,6 +32,6 @@ if __name__=="__main__":
     if masuk == "1":
         corona1()
     elif masuk == "2":
-        print("Coming Soon!!")
+        corona2()
     else:
         print("Salah Input!!")
